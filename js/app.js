@@ -135,7 +135,10 @@ $(document).ready(function() {
       map: scene,
       padding: app.viewPadding,
       ui: app.ui,
-      popup: app.popup
+      popup: app.popup,
+      altitude:{
+        min: 680
+      }
     });
 
     // \\\\\\\\\ ADD APP MAP AND SCENE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -315,17 +318,6 @@ $(document).ready(function() {
         var date = feature.attributes.timespan;
         var location = feature.attributes.city;
 
-
-
-        var vtItemId = feature.attributes.label;
-
-        var vtLayer = app.sceneView.map.findLayerById("vtId");
-        var vtUrl = "http://bradjsnider.maps.arcgis.com/sharing/rest/content/items/" + vtItemId + "/resources/styles/root.json";
-        vtLayer.loadStyle(vtUrl);
-
-
-
-
         var panelBullets = "";
         for (i = 1; i < 7; i++) {
           var currentBullet = feature.attributes['bullet' + i];
@@ -358,10 +350,10 @@ $(document).ready(function() {
       }
 
 
-      var operationalLayer = app.activeView.map.layers.items[0];
+      //var operationalLayer = app.activeView.map.layers.items[0];
 
       //console.log(operationalLayer);
-      app.activeView.whenLayerView(operationalLayer).then(function(lyrView) {
+      app.activeView.whenLayerView(fl).then(function(lyrView) {
         lyrView.watch("updating", function(val) {
           if (!val && !loaded) { // wait for the layer view to finish updating
 
@@ -375,8 +367,26 @@ $(document).ready(function() {
               query.geometry = pointToExtent(app.activeView, mapPoint, 40);
               lyrView.queryFeatures(query)
                 .then(function(res) {
-                  console.log(res);
-                  app.activeView.goTo(res);
+                  var geomArray = [];
+                  arrayUtils.forEach(res, function(feature) {
+                    console.log(feature);
+                    geomArray.push(feature.geometry);
+                  });
+                  console.log(geomArray);
+                  if (geomArray.length == 1){
+                    var geom = geomArray[0].z = 680;
+                    app.activeView.goTo(geomArray).then(function(){
+                      var vtItemId = res[0].attributes.label;
+
+                      var vtLayer = app.sceneView.map.findLayerById("vtId");
+                      var vtUrl = "http://bradjsnider.maps.arcgis.com/sharing/rest/content/items/" + vtItemId + "/resources/styles/root.json";
+                      vtLayer.loadStyle(vtUrl);
+                    });
+                  }
+                  else{
+                    app.activeView.goTo(geomArray);
+                  }
+
                 });
             });
 
