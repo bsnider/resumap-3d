@@ -1,6 +1,8 @@
 define([
   'dojo/_base/declare',
   'dojo/_base/lang',
+  "dojo/_base/array",
+
 
   'dojo/dom-style',
   "dojo/dom-construct",
@@ -13,7 +15,7 @@ define([
   './SlideItem',   "esri/request"
 
 ], function(
-  declare, lang,
+  declare, lang, arrayUtils,
   domStyle, domConstruct,
   _WidgetBase, _TemplatedMixin, template,
   SlideItem, esriRequest
@@ -27,8 +29,6 @@ define([
 
     options: {
       popTemp: null,
-      queryFeat: null,
-      features: null,
       lyrView: null,
       scene: null,
       view: null,
@@ -98,6 +98,10 @@ define([
 
     _applySlide: function(slide, index) {
       slide.visibleLayers = this.scene.allLayers
+      slide.watch('_currentAnimation.state', function(evt1, evt2, evt3, evt4){
+        console.log(evt1, evt2, evt3, evt4)
+      });
+
       slide.applyTo(this.view);
       console.log(index, slide);
 
@@ -107,7 +111,7 @@ define([
 
       var actions = [{
           id: "open-website",
-          image: "linddddk.png",
+          image: "icons/link.png",
           title: "Info"
         }]//setActionInfo//,
       overwriteActions: true
@@ -118,28 +122,6 @@ define([
       this.popTemp.actions = actions;
       this.popTemp.overwriteActions = true;
 
-      // function setTitleInfo() {
-      //   return result.attributes.shortAlias;
-      // }
-      //
-      // function setContentInfo() {
-      //   var name = result.attributes.name;
-      //
-      //   var panelBullets = "";
-      //   for (i = 1; i < 7; i++) {
-      //     var currentBullet = result.attributes['bullet' + i];
-      //     if (currentBullet != null) {
-      //       var listItem = "<li class='bullet'>" + currentBullet + "</li>";
-      //       panelBullets = panelBullets + listItem;
-      //     }
-      //   }
-      //
-      //   var node = domConstruct.create("div", {
-      //     innerHTML: "panelBullets"
-      //   });
-      //   console.log(node);
-      //   return panelBullets;
-      // }
 
       function setTitleInfo(){
         var name = result.attributes.shortAlias;
@@ -147,38 +129,65 @@ define([
         var location = result.attributes.city;
         var date = result.attributes.timespan;
 
-        return "<h4>" + name + " - " + position + "</h4><h5>" + location + " &nbsp;&nbsp; | &nbsp;&nbsp; " + date + "</h5>" ;
+        return "<h4 class='popup-header'><i class='fa fa-map-pin' aria-hidden='true' style='margin-left:20px; margin-right:10px;'></i><span style='white-space: nowrap;'>" + position + " &nbsp;&nbsp; |</span> &nbsp;&nbsp; <span style='white-space: nowrap;''>" + name + "</span></h4>";
+
       }
       function setContentInfo() {
         console.log(result);
-        var name = result.attributes.name;
+        var name = result.attributes.shortAlias;
         var date = result.attributes.timespan;
         var location = result.attributes.city;
 
+        var courseList= "";
+        var subjectList= "";
         var panelBullets = "";
         for (i = 1; i < 7; i++) {
           var currentBullet = result.attributes['bullet' + i];
           if (currentBullet != null) {
-            var listItem = "<li class='bullet'>" + currentBullet + "</li>";
+            var listItem = "<p class='popup-bullet'><i class='fa fa-location-arrow fa-lg' aria-hidden='true'></i>  " + currentBullet + "</p>";
             panelBullets = panelBullets + listItem;
           }
         }
+        if(name == "University of Michigan"){
+          var courseArray = ["Environmental and Sustainable Engineering", "Environmental Justice", "Food, Land, and Society", "Conservation of Biological Diversity"];
 
-        var contentText = "<h5>" + location + " &nbsp;&nbsp; | &nbsp;&nbsp; " + date + "</h5>" + panelBullets;
+          arrayUtils.forEach(courseArray, function(course){
+            var listItem;
+            listItem = "<p class='popup-bulcourselet'><i class='fa fa-book fa-lg' aria-hidden='true'></i> " + course + "</p>";
+             courseList = courseList + listItem;
+          });
+          courseList = "Influential courses:" + courseList;
+          console.log(courseList);
+        }
+        else if(name == "University of Arizona"){
+          var courseArray = ["Remote sensing", "Geodata management", "Cartography", "Spatial statistics", "Scripting and Web GIS"];
+
+          arrayUtils.forEach(courseArray, function(course){
+            var listItem;
+            listItem = "<p class='popup-course'><i class='fa fa-book fa-lg' aria-hidden='true'></i> " + course + "</p>";
+             subjectList = subjectList + listItem;
+          });
+          subjectList = "Influential topics:" + subjectList;
+          console.log(subjectList);
+        }
+
+
+        var contentFooter = "<h5 class='popup-footer'>" + location + " &nbsp;&nbsp; | &nbsp;&nbsp; " + date + "</h5>";
 
         var node = domConstruct.create("div", {
-          innerHTML: panelBullets
+          innerHTML: panelBullets + courseList + subjectList + contentFooter
         });
         console.log(node);
 
-        return panelBullets;
+        return panelBullets + courseList + subjectList + contentFooter;
       }
-      // 
+
+
       // var vtItemId = result.attributes.label;
       // var vtLayer = app.sceneView.map.findLayerById("vtId");
       // var vtUrl = "http://bradjsnider.maps.arcgis.com/sharing/rest/content/items/"+ vtItemId + "/resources/styles/root.json";
       // vtLayer.loadStyle(vtUrl);
-      //
+
 
 
 

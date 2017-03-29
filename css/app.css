@@ -1,3 +1,18 @@
+.popup-course {
+    padding-left: 1.4em;
+    text-indent: -.4em;
+}
+
+.popup-footer{
+      text-indent: 0.4em;
+}
+.popup-header{
+  text-indent: -.7em;
+}
+.popup-bullet{
+  padding-left: 1.4em;
+  text-indent: -.7em;
+}
 .navbar{
   opacity: .95;
 }
