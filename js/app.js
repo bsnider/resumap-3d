@@ -235,7 +235,7 @@ $(document).ready(function() {
           $('body').addClass('loaded');
           $('h1').css('color', '#222222');
           setTimeout(function() {
-            $('#aboutModal').modal('show');
+            // $('#aboutModal').modal('show');
           }, 1000);
         }, 3000);
       });
@@ -308,29 +308,56 @@ $(document).ready(function() {
         var location = feature.attributes.city;
         var date = feature.attributes.timespan;
 
-        return "<h4>" + name + " - " + position + "</h4><h5>" + location + " &nbsp;&nbsp; | &nbsp;&nbsp; " + date + "</h5>";
+        return "<h4 class='popup-header'><i class='fa fa-map-pin' aria-hidden='true' style='margin-left:20px; margin-right:10px;'></i><span style='white-space: nowrap;'>" + position + " &nbsp;&nbsp; |</span> &nbsp;&nbsp; <span style='white-space: nowrap;''>" + name + "</span></h4>";
       }
 
       function setContentInfo(feature) {
         feature = feature.graphic;
         console.log(feature);
-        var name = feature.attributes.name;
+        var name = feature.attributes.shortAlias;
         var date = feature.attributes.timespan;
         var location = feature.attributes.city;
 
+        var courseList = "";
+        var subjectList= "";
         var panelBullets = "";
         for (i = 1; i < 7; i++) {
           var currentBullet = feature.attributes['bullet' + i];
           if (currentBullet != null) {
-            var listItem = "<li class='bullet'>" + currentBullet + "</li>";
+            var listItem = "<p class='popup-bullet'><i class='fa fa-location-arrow fa-lg' aria-hidden='true'></i>  " + currentBullet + "</p>";
             panelBullets = panelBullets + listItem;
           }
         }
+        if(name == "University of Michigan"){
+          var courseArray = ["Environmental and Sustainable Engineering", "Environmental Justice", "Food, Land, and Society", "Conservation of Biological Diversity"];
 
-        var contentText = "<h5>" + location + " &nbsp;&nbsp; | &nbsp;&nbsp; " + date + "</h5>" + panelBullets;
+          arrayUtils.forEach(courseArray, function(course){
+            var listItem;
+            listItem = "<p class='popup-course'><i class='fa fa-book fa-lg' aria-hidden='true'></i> " + course + "</p>";
+             courseList = courseList + listItem;
+          });
+          courseList = "Influential courses:" + courseList;
+
+          console.log(courseList);
+          //var relevant courses = "Environmental and Sustainable Engineering"
+        }
+        else if(name == "University of Arizona"){
+          var courseArray = ["Remote sensing", "Geodata management", "Cartography", "Spatial statistics", "Scripting and Web GIS"];
+
+          arrayUtils.forEach(courseArray, function(course){
+            var listItem;
+            listItem = "<p class='popup-course'><i class='fa fa-book fa-lg' aria-hidden='true'></i> " + course + "</p>";
+             subjectList = subjectList + listItem;
+          });
+          subjectList = "Influential topics:" + subjectList;
+          console.log(subjectList);
+        }
+
+
+        var contentFooter = "<h5 class='popup-footer'>" + location + " &nbsp;&nbsp; | &nbsp;&nbsp; " + date + "</h5>";
 
         var node = domConstruct.create("div", {
-          innerHTML: panelBullets
+          innerHTML: panelBullets + courseList + subjectList + contentFooter
         });
         console.log(node);
         console.log(setActionInfo(feature));
@@ -349,10 +376,6 @@ $(document).ready(function() {
         return actions;
       }
 
-
-      //var operationalLayer = app.activeView.map.layers.items[0];
-
-      //console.log(operationalLayer);
       app.activeView.whenLayerView(fl).then(function(lyrView) {
         lyrView.watch("updating", function(val) {
           if (!val && !loaded) { // wait for the layer view to finish updating
@@ -372,8 +395,10 @@ $(document).ready(function() {
                     console.log(feature);
                     geomArray.push(feature.geometry);
                   });
+                  console.log(app.sceneView.popup.featureCount);
                   console.log(geomArray);
                   if (geomArray.length == 1){
+                    // app.activeView.popup.visible = true;
                     var geom = geomArray[0].z = 680;
                     app.activeView.goTo(geomArray).then(function(){
                       var vtItemId = res[0].attributes.label;
@@ -384,9 +409,18 @@ $(document).ready(function() {
                     });
                   }
                   else{
+                    app.activeView.popup.watch('featureCount', function(newValue, oldValue, property, object) {
+                    //debugger;
+                    console.log("New value: ", newValue,      // The new value of the property
+                                 "<br>Old value: ", oldValue,  // The previous value of the changed property
+                                 "<br>Watched property: ", property,  // In this example this value will always be "basemap.title"
+                                 "<br>Watched object: ", object);     // In this example this value will always be the map object
+                                 //app.activeView.popup.visible = false;
+
+                    });
+
                     app.activeView.goTo(geomArray);
                   }
-
                 });
             });
 
