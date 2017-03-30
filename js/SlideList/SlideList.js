@@ -97,12 +97,19 @@ define([
     },
 
     _applySlide: function(slide, index) {
+      var result = this.features[index];
       slide.visibleLayers = this.scene.allLayers
-      slide.watch('_currentAnimation.state', function(evt1, evt2, evt3, evt4){
+      slide.watch('_currentAnimation', function(evt1, evt2, evt3, evt4){
         console.log(evt1, evt2, evt3, evt4)
       });
 
-      slide.applyTo(this.view);
+      slide.applyTo(this.view).then(function(evt){
+        console.log(result);
+        var vtItemId = result.attributes.label;
+        var vtLayer = app.sceneView.map.findLayerById("vtId");
+        var vtUrl = "http://bradjsnider.maps.arcgis.com/sharing/rest/content/items/"+ vtItemId + "/resources/styles/root.json";
+        vtLayer.loadStyle(vtUrl);
+      });
       console.log(index, slide);
 
       var slideNum = index + 1;
@@ -116,7 +123,6 @@ define([
         }]//setActionInfo//,
       overwriteActions: true
 //      console.log(slideLyr);
-      var result = this.features[index];
       this.popTemp.title = setTitleInfo();
       this.popTemp.content = setContentInfo();
       this.popTemp.actions = actions;
@@ -183,10 +189,7 @@ define([
       }
 
 
-      // var vtItemId = result.attributes.label;
-      // var vtLayer = app.sceneView.map.findLayerById("vtId");
-      // var vtUrl = "http://bradjsnider.maps.arcgis.com/sharing/rest/content/items/"+ vtItemId + "/resources/styles/root.json";
-      // vtLayer.loadStyle(vtUrl);
+
 
 
 
