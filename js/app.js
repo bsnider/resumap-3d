@@ -305,8 +305,6 @@ $(document).ready(function() {
         feature = feature.graphic;
         var name = feature.attributes.shortAlias;
         var position = feature.attributes.position;
-        var location = feature.attributes.city;
-        var date = feature.attributes.timespan;
 
         return "<h4 class='popup-header'><i class='fa fa-map-pin' aria-hidden='true' style='margin-left:20px; margin-right:10px;'></i><span style='white-space: nowrap;'>" + position + " &nbsp;&nbsp; |</span> &nbsp;&nbsp; <span style='white-space: nowrap;''>" + name + "</span></h4>";
       }
@@ -349,7 +347,7 @@ $(document).ready(function() {
             listItem = "<p class='popup-course'><i class='fa fa-book fa-lg' aria-hidden='true'></i> " + course + "</p>";
              subjectList = subjectList + listItem;
           });
-          subjectList = "Influential topics:" + subjectList;
+          subjectList = "Notable topics:" + subjectList;
           console.log(subjectList);
         }
 
