@@ -334,7 +334,7 @@ $(document).ready(function() {
             listItem = "<p class='popup-course'><i class='fa fa-book fa-lg' aria-hidden='true'></i> " + course + "</p>";
              courseList = courseList + listItem;
           });
-          courseList = "Influential courses:" + courseList;
+          courseList = "Influential courses:<br><br>" + courseList;
 
           console.log(courseList);
           //var relevant courses = "Environmental and Sustainable Engineering"
@@ -347,7 +347,7 @@ $(document).ready(function() {
             listItem = "<p class='popup-course'><i class='fa fa-book fa-lg' aria-hidden='true'></i> " + course + "</p>";
              subjectList = subjectList + listItem;
           });
-          subjectList = "Notable topics:" + subjectList;
+          subjectList = "Notable topics:<br><br>" + subjectList;
           console.log(subjectList);
         }
 
