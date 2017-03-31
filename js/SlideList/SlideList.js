@@ -176,7 +176,17 @@ define([
           subjectList = "Influential topics:" + subjectList;
           console.log(subjectList);
         }
+        else if(name == "Esri"){
+          var courseArray = ["Starting	Fresh	with	JavaScript	4.x:	Esri	User	Conference,	June	2016", "Building	Native	Apps	Using	AppStudio	for	ArcGIS:	Esri	Pre-Developer	Summit Hands-on	Training,	March	2016", "Debugging	offline	editing	using	the	ArcGIS	Runtime	SDK	for	iOS:	Esri	User	Conference,	July 2015"];
 
+          arrayUtils.forEach(courseArray, function(course){
+            var listItem;
+            listItem = "<p class='popup-course'><i class='fa fa-tv fa-lg' aria-hidden='true'></i> &nbsp;&nbsp;" + course + "</p>";
+             subjectList = subjectList + listItem;
+          });
+          subjectList = "Presentations:<br><br>" + subjectList;
+          console.log(subjectList);
+        }
 
         var contentFooter = "<h5 class='popup-footer'>" + location + " &nbsp;&nbsp; | &nbsp;&nbsp; " + date + "</h5>";
 
