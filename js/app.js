@@ -322,7 +322,7 @@ $(document).ready(function() {
         for (i = 1; i < 7; i++) {
           var currentBullet = feature.attributes['bullet' + i];
           if (currentBullet != null) {
-            var listItem = "<p class='popup-bullet'><i class='fa fa-location-arrow fa-lg' aria-hidden='true'></i>  " + currentBullet + "</p>";
+            var listItem = "<p class='popup-bullet'><i class='fa fa-location-arrow fa-lg' aria-hidden='true'></i>  &nbsp;&nbsp;" + currentBullet + "</p>";
             panelBullets = panelBullets + listItem;
           }
         }
@@ -331,7 +331,7 @@ $(document).ready(function() {
 
           arrayUtils.forEach(courseArray, function(course){
             var listItem;
-            listItem = "<p class='popup-course'><i class='fa fa-book fa-lg' aria-hidden='true'></i> " + course + "</p>";
+            listItem = "<p class='popup-course'><i class='fa fa-book fa-lg' aria-hidden='true'></i> &nbsp;&nbsp;" + course + "</p>";
              courseList = courseList + listItem;
           });
           courseList = "Influential courses:<br><br>" + courseList;
@@ -344,10 +344,21 @@ $(document).ready(function() {
 
           arrayUtils.forEach(courseArray, function(course){
             var listItem;
-            listItem = "<p class='popup-course'><i class='fa fa-book fa-lg' aria-hidden='true'></i> " + course + "</p>";
+            listItem = "<p class='popup-course'><i class='fa fa-book fa-lg' aria-hidden='true'></i> &nbsp;&nbsp;" + course + "</p>";
              subjectList = subjectList + listItem;
           });
           subjectList = "Notable topics:<br><br>" + subjectList;
+          console.log(subjectList);
+        }
+        else if(name == "Esri"){
+          var courseArray = ["Starting	Fresh	with	JavaScript	4.x:	Esri	User	Conference,	June	2016", "Building	Native	Apps	Using	AppStudio	for	ArcGIS:	Esri	Pre-Developer	Summit Hands-on	Training,	March	2016", "Debugging	offline	editing	using	the	ArcGIS	Runtime	SDK	for	iOS:	Esri	User	Conference,	July 2015"];
+
+          arrayUtils.forEach(courseArray, function(course){
+            var listItem;
+            listItem = "<p class='popup-course'><i class='fa fa-tv fa-lg' aria-hidden='true'></i> &nbsp;&nbsp;" + course + "</p>";
+             subjectList = subjectList + listItem;
+          });
+          subjectList = "Presentations:<br><br>" + subjectList;
           console.log(subjectList);
         }
 
