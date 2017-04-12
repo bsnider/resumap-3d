@@ -224,7 +224,7 @@ $(document).ready(function() {
 
     scene.then(function() {
       var vtItemId = "0da65895327a45dd91acb890c6ed7690";
-      var vtUrl = "http://bradjsnider.maps.arcgis.com/sharing/rest/content/items/" + vtItemId + "/resources/styles/root.json";
+      var vtUrl = "https://bradjsnider.maps.arcgis.com/sharing/rest/content/items/" + vtItemId + "/resources/styles/root.json";
       var vtLayer = new VectorTileLayer({
         // URL to the style of vector tiles
         url: vtUrl,
