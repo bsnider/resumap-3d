@@ -107,7 +107,7 @@ define([
         console.log(result);
         var vtItemId = result.attributes.label;
         var vtLayer = app.sceneView.map.findLayerById("vtId");
-        var vtUrl = "http://bradjsnider.maps.arcgis.com/sharing/rest/content/items/"+ vtItemId + "/resources/styles/root.json";
+        var vtUrl = "https://bradjsnider.maps.arcgis.com/sharing/rest/content/items/"+ vtItemId + "/resources/styles/root.json";
         vtLayer.loadStyle(vtUrl);
       });
       console.log(index, slide);
