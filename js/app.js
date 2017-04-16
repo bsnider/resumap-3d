@@ -223,7 +223,7 @@ $(document).ready(function() {
 
 
     scene.then(function() {
-      var vtItemId = "0da65895327a45dd91acb890c6ed7690";
+      var vtItemId = "2c0e35d22b7b4f5baf480eba3d4cd722";
       var vtUrl = "https://bradjsnider.maps.arcgis.com/sharing/rest/content/items/" + vtItemId + "/resources/styles/root.json";
       var vtLayer = new VectorTileLayer({
         // URL to the style of vector tiles
@@ -394,6 +394,8 @@ $(document).ready(function() {
                 x: response.mapPoint.x,
                 y: response.mapPoint.y
               };
+              console.log(app.activeView.scale);
+
 
               var query = new Query();
               query.geometry = pointToExtent(app.activeView, mapPoint, 40);
@@ -408,13 +410,15 @@ $(document).ready(function() {
                   console.log(geomArray);
                   if (geomArray.length == 1){
                     // app.activeView.popup.visible = true;
-                    var geom = geomArray[0].z = 680;
+                    if (app.activeView.scale > 20000){
+                      geomArray[0].z = 680;
+                    }
                     app.activeView.goTo(geomArray).then(function(){
                       var vtItemId = res[0].attributes.label;
 
-                      var vtLayer = app.sceneView.map.findLayerById("vtId");
-                      var vtUrl = "https://bradjsnider.maps.arcgis.com/sharing/rest/content/items/" + vtItemId + "/resources/styles/root.json";
-                      vtLayer.loadStyle(vtUrl);
+                      // var vtLayer = app.sceneView.map.findLayerById("vtId");
+                      // var vtUrl = "https://bradjsnider.maps.arcgis.com/sharing/rest/content/items/" + vtItemId + "/resources/styles/root.json";
+                      // vtLayer.loadStyle(vtUrl);
                     });
                   }
                   else{
